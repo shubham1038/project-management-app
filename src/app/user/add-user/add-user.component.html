@@ -1,0 +1,98 @@
+<div class="container">
+    <div class="form-area mt-3">
+    </div>
+    <form name="form" novalidate (ngSubmit)="userForm.form.valid && onSubmit()" #userForm="ngForm" novalidate>
+       
+        <div class="form-group">
+            <label for="firstName">{{'lblFirstName' | translate}}</label>
+            <input type="text" class="form-control" name="firstName" [(ngModel)]="employee.firstName"
+                 required #firstName="ngModel" [ngClass]="{ 'is-invalid': userForm.submitted && firstName.invalid }" minlength="2" maxlength="100">
+            <div *ngIf="userForm.submitted && firstName.errors && (firstName.invalid || firstName.touched)">
+                <div  class="alert alert-danger" *ngIf="firstName.errors.required">First Name is required</div>
+                <div  class="alert alert-danger" [hidden]="!firstName.hasError('minlength')">First Name is required (minimum 2 characters)</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="name">{{'lblLastName' | translate}}</label>
+            <input type="text" class="form-control" name="lastName" [(ngModel)]="employee.lastName" 
+            [ngClass]="{ 'is-invalid': userForm.submitted && lastName.invalid }" required #lastName="ngModel" minlength="2" maxlength="100">
+            <div *ngIf="userForm.submitted && lastName.invalid" class="alert alert-danger">
+              <div *ngIf="lastName.errors.required">Last Name is required</div>
+              <div [hidden]="!lastName.hasError('minlength')">Last Name is required (minimum 2 characters)</div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="name">{{'lblEmployeeId' | translate}}</label>
+            <input type="text" [disabled]="employee?.userId != null"  class="form-control" name="employeeId" [(ngModel)]="employee.employeeId" 
+              #employeeId="ngModel" [ngClass]="{ 'is-invalid': userForm.submitted && employeeId.invalid }" required pattern="[0-9]*">
+            <div *ngIf="userForm.submitted && employeeId.invalid" class="alert alert-danger">
+              <div *ngIf="employeeId.errors.required">Employee ID is required</div>
+              <div [hidden]="!employeeId.hasError('pattern')">Employee Id should be only numbers</div>
+          </div>
+        </div>
+        
+        <div class="form-group btn-toolbar pull-right">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-secondary float-right m-1" id="reset"
+                    (click)="reset()">{{'btnReset' | translate}}</button>
+                <button type="submit" *ngIf= "displayAddBtn == true" class="btn btn-primary float-right m-1"
+                    id="add">{{'btnAddUser' | translate}}</button>
+                <button type="submit" *ngIf= "displayAddBtn == false"class="btn btn-primary float-right m-1"
+                    id="add">{{'btnUpdateUser' | translate}}</button>
+            </div>
+        </div>
+    </form>
+</div>
+<hr class="style1">
+<div *ngIf="empList.length ==0; else other_content">
+  <div>
+    <p class="h4">No Users available</p>
+  </div>
+</div>
+
+<ng-template #other_content>
+  <div class="container">
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            <input type="text" #search (keyup)="0" class="form-control" placeholder="{{'btnSearch' | translate}}" [(ngModel)]="searchName">
+        </div>
+        <div class="col-md-6 col-sm-6">
+          <label>{{'lblSortBy' | translate}}:</label>
+          <button type="submit" class="btn btn-primary m-1" id="fname" (click) = "sort('firstName')">{{'lblFirstName' | translate}}</button>
+          <button type="submit" class="btn btn-info m-1" id="lname" (click) = "sort('lastName')">{{'lblLastName' | translate}}</button>
+          <button type="submit" class="btn btn-primary m-1" id="empid" (click) = "sort('employeeId')">{{'btnId' | translate}}</button>
+      
+      </div>
+    </div>
+  </div>
+</ng-template>
+<hr class="style1">
+<div class="panel-body">
+    <table class="table table-hover table-sm" datatable>
+      <thead class="thead-light">
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Employee Id</th>
+          <th>Action</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let emp of empList | searchpipe:searchName">
+          <td>{{emp.firstName}}</td>
+          <td>{{emp.lastName}}</td>
+          <td>{{emp.employeeId}}</td>
+          <td><button (click)="deleteUser(emp.userId)" class='btn btn-primary m-1'><i
+                class="fa fa-futboll-0">Delete</i></button>
+             <button (click)="updateUser(emp)" class='btn btn-info m-1' data-toggle="modal"
+              data-target="#myModal">Update</button>
+          </td>
+        </tr>
+      </tbody><br>
+    </table>
+  </div>
+  <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">
+    <p style="color: white">Please Wait. </p>
+</ngx-spinner>

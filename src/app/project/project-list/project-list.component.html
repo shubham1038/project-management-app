@@ -1,0 +1,57 @@
+<hr class="style1">
+<div *ngIf="projectLength ==0; else other_content">
+  <div>
+    <p class="h4">No projects available</p>
+  </div>
+</div>
+ 
+<ng-template #other_content>
+  <div class="container">
+    <div class="row">
+        <div class="col-md-6 col-sm-6">
+            <input type="text" #search (keyup)="0" class="form-control" placeholder="{{'btnSearch' | translate}}" [(ngModel)]="searchName">
+        </div>
+        <div class="col-md-6 col-sm-6">
+          <label>{{'lblSortBy' | translate}}:</label>
+          <button type="submit" class="btn btn-primary m-2" id="fname" (click)="sort('startDate')">{{'lblStartDate' | translate}}</button>
+          <button type="submit" class="btn btn-info m-2" id="lname" (click)="sort('endDate')">{{'lblEndDate' | translate}}</button>
+          <button type="submit" class="btn btn-primary m-2" id="empid" (click)="sort('priority')">{{'lblPriority' | translate}}</button>
+          <button type="submit" class="btn btn-info m-2" id="empid" (click)="sort('completedTasks')">{{'lblCompleted' | translate}}</button>
+      
+      </div>
+    </div>
+  </div>
+</ng-template>
+<hr class="style1">
+<div class="panel-body">
+    <table class="table table-hover table-sm" datatable>
+      <thead class="thead-light">
+        <tr>
+          <th>Project Name</th>
+          <th>No Of Tasks</th>
+          <th>Completed Tasks</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Priority</th>
+          <th>Action</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let project of projectList |searchpipe:searchName">
+          <td>{{project.project}}</td>
+          <td>{{project.noOfTasks}}</td>
+          <td>{{project.completedTasks}}</td>
+          <td>{{project.startDate}}</td>
+          <td>{{project.endDate}}</td>
+          <td>{{project.priority}}</td>
+          <td>
+            <button (click)="deleteUser(project.projectId)" class='btn btn-primary m-2'><i
+                class="fa fa-futboll-0">Delete</i></button>
+             <button (click)="updateUser(project)" class='btn btn-info m-2' data-toggle="modal"
+              data-target="#myModal">Update</button>
+          </td>
+        </tr>
+      </tbody><br>
+    </table>
+  </div>

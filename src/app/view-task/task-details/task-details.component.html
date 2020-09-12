@@ -1,0 +1,33 @@
+<div class="panel-body">
+    <table class="table table-hover table-sm" datatable>
+        <thead class="thead-light">
+            <tr>
+                <th>{{'lblTask' | translate}}</th>
+                <th>{{'lblParentTask' | translate}}</th>
+                <th>{{'lblPriority' | translate}}</th>
+                <th>{{'lblStartDate' | translate}}</th>
+                <th>{{'lblEndDate' | translate}}</th>
+                <th>Action</th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+            <tr *ngFor = "let taskDetail of taskDetails; let i = index">
+                <td>{{taskDetail.task}}</td>
+                <td>{{taskDetail?.selectedParentTask?.parentTask}}</td>
+                <td>{{taskDetail.priority}}</td>
+                <td>{{taskDetail.startDate |date:'yyyy-MM-dd' }}</td>
+                <td>{{taskDetail.endDate |date:'yyyy-MM-dd'}}</td>
+                <td>
+                    <button *ngIf="taskDetail.status != 0" (click)="edit(taskDetail.taskId)" class='btn btn-primary'><i
+                            class="fa fa-futboll-0">{{'btnEdit' | translate}}</i></button>
+                    <button *ngIf="taskDetail.status == 0" (click)="edit(taskDetail.taskId)" class='btn btn-primary' data-toggle="modal"
+                        data-target="#myModal">{{'btnView' | translate}}</button>
+                    <button *ngIf="taskDetail.status != 0" (click)="endTask(taskDetail.taskId)" class='btn btn-primary'
+                        data-toggle="modal" data-target="#myModal">{{'btnEndTask' | translate}}</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

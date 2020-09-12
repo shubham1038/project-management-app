@@ -1,0 +1,9 @@
+#navBarBrand { color: rgb(238, 234, 234); }
+
+.bgColor{
+  background-color: blueviolet;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: chartreuse
+}
